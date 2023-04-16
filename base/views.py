@@ -1,32 +1,38 @@
 from django.shortcuts import render
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView,UpdateView,DeleteView
-from .models import Task
-from django.urls import reverse_lazy
+# from django.http import HttpResponse
+
 # Create your views here.
-class TaskList(ListView):
-    model = Task
-    template_name = 'base/task_list.html'
-    context_object_name= 'tasks'
+tasks = [
+    {'taskid': '1', 'taskaction': 'Transfer',
+        'taskname': 'Move Roy to Design team', 'taskdate': '14/4/23'},
+    {'taskid': '2', 'taskaction': 'Shopping',
+        'taskname': 'Buy Groceries for home', 'taskdate': '15/4/23'},
+    {'taskid': '3', 'taskaction': 'Transfer',
+        'taskname': 'Move Praveen to Development team', 'taskdate': '14/4/23'},
+    {'taskid': '4', 'taskaction': 'Visit',
+        'taskname': 'Visit Mr. Roy', 'taskdate': '14/4/23'},
+    {'taskid': '5', 'taskaction': 'Conference',
+        'taskname': 'Attend the tech conference', 'taskdate': '17/4/23'}
+]
 
-class TaskDetail(DetailView):
-    model= Task
-    context_object_name='task'
-    template_name= 'base/task.html'
 
-class TaskCreate(CreateView):
-    model=Task
-    fields='__all__'
-    success_url=reverse_lazy('tasks')
+def dashboard(request):
+    context = {'tasks': tasks}
+    return render(request, 'base/Dashboard.html', context)
 
-class TaskUpdate(UpdateView):
-    model=Task
-    fields='__all__'
-    success_url=reverse_lazy('tasks')
 
-class TaskDelete(DeleteView):
-    model=Task
-    context_object_name='task'
-    template_name= 'base/task_confirm_del.html'
-    success_url=reverse_lazy('tasks')
+def tab1(request):
+    return render(request, 'base/tab1.html')
+
+
+def taskpage(request, pk):
+    task = None
+    for i in tasks:
+        if i['taskname'] == pk:
+            task = i
+    context = {'task': task}
+    return render(request, 'base/tab2.html', context)
+
+
+def tab3(request):
+    return render(request, 'base/tab3.html')
