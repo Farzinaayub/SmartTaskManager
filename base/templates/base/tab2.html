@@ -1,7 +1,12 @@
 {% extends 'main.html' %}
 
-
-{%  block content  %}
-
-<h2 style="text-align: center;">{{task.taskname}}</h2>
+{% block content %}
+  <h2>{{ task.Action }}</h2>
+  <p>{{ task.Task }}</p>
+  <ul>
+    <li><strong>Date:</strong> {{ task.Date }}</li>
+    <li><strong>Time:</strong> {{ task.Time }}</li>
+    <li><strong>Stakeholders:</strong> {{ task.Stakeholders }}</li>
+    <li><strong>Location:</strong> {{ task.Location }}</li>
+  </ul>
 {% endblock %}

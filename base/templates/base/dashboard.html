@@ -5,14 +5,15 @@
 <h1>Dashboard Template</h1>
 <div>
     <div>
-        {% for task in tasks %}
-        <hr>
-            <div>
-                <h3>{{task.taskaction}} --- <a href="{% url 'update' task.taskname %}">{{task.taskname}}</a></h3>
-                <hr>
-            </div>
-        {% endfor %}
-
+        
+        
+          <hr>
+          <div>
+            <h3><a href="{% url 'update' tasks.Id %}">{{ tasks.Task }}</a></h3>
+          </div>
+          <hr>
+        
+      
     </div>
 
 </div>
