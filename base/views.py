@@ -1,5 +1,3 @@
-
-import secrets
 import api_key
 import transcribe
 import openai
@@ -16,7 +14,7 @@ input_text = transcribe.from_mic()
 def ner(input_text):
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt=f"Extract the entities from the text with labels Id,Action,Task,Time,Relative time,Date,Relative Date,Stakeholders,Location\ntext: Remind me to buy some chocolates for saya and diya from Lulu Mall.\n\nId:1\nAction:Set Reminder\nTask: Buy Chocolates\nTime: Not specified\nRelative time: not specified\nDate: not specified\nRelative Date: Today\nStakeholders: me,saya,diya\nLocation: Lulu Mall\n##\ntext: assign the frontend module to rajesh's team. They can start working from tomorrow\n\nId:2\nAction: Delegation\nTask: Assign Frontend Module\nTime: Not specified\nRelative time: Tomorrow\nDate: Not specified\nRelative Date: Tomorrow\nStakeholders: Rajesh's Team\nLocation: Office\n##\ntext:{input_text}\n",
+        prompt=f"Extract the entities from the text with labels Id,name,desc,date,category\ntext: Remind me to buy some chocolates for saya and diya from Lulu Mall.\n\nId:1\nname:Set Reminder\ndesc: Buy Chocolates for kids\ndate:Not specified\ncategory:family\n##\ntext: assign the frontend module to rajesh's team. They can start working from tomorrow\n\nId:2\nname: Delegate\ndesc: Assign Frontend Module to rajesh's team\ndate: Not specified\ncategory:work\n##\ntext:{input_text}\n",
         temperature=0.02,
         max_tokens=256,
         top_p=1,
@@ -39,28 +37,23 @@ def ner(input_text):
 tasks = ner(input_text)
 print(tasks)
 
-# print(random_token)
-
-
-# print(ner(input_text))
-
 
 def dashboard(request):
+    task = Task(name=tasks['name'], desc=tasks['desc'])
+    task.save()
+
     context = {'tasks': tasks}
     return render(request, 'base/Dashboard.html', context)
 
 
 def tab1(request):
-    return render(request, 'base/tab1.html')
+    tasks = Task.objects.all()
+    context = {'tasks': tasks}
+    print(tasks)
+    return render(request, 'base/tab1.html', context)
 
 
 def taskpage(request, pk):
-    # task = None
-    # for key, value in tasks.items():
-    #     if value['Id'] == pk:
-
-    #         task = value
-    #         break
     tasks['Id'] == pk
     context = {'task': tasks}
     return render(request, 'base/tab2.html', context)
@@ -68,7 +61,6 @@ def taskpage(request, pk):
 
 def tab3(request):
     return render(request, 'base/tab3.html')
-
 
 # from django.http import HttpResponse
 

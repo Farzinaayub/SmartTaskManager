@@ -3,12 +3,12 @@ from datetime import date
 # Create your models here.
 
 
-class Category(models.Model):
-    # task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
+# class Category(models.Model):
+#     # task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.name
+
+#     def __str__(self):
+#         return self.name
 
 
 # class Date(models.Model):
@@ -35,8 +35,7 @@ class Task(models.Model):
     # date = models.ForeignKey(
     #     Date, on_delete=models.SET_NULL, null=True)
     date = models.DateField(default=date.today, null=True)
-    category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True)
+    category = models.CharField(max_length=200, null=True)
 
     def __str__(self):
         return self.name

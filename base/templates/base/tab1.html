@@ -1,6 +1,13 @@
 {% extends 'main.html' %}
 
-
-{%  block content  %}
-<h2>tab1</h2>
+{% block content %}
+{% for task in tasks %}
+  <h2>{{ task.name }}</h2>
+  <p>{{ task.desc }}</p>
+  <ul>
+    <li><strong>Date:</strong> {{ task.date }}</li>
+    <li><strong>category:</strong> {{ task.category }}</li>
+  </ul>
+  <hr>
+  {% endfor %}
 {% endblock %}
