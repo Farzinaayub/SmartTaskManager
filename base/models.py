@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.utils import timezone
 # Create your models here.
 
 
@@ -27,15 +28,29 @@ from datetime import date
 #         return str(self.desc[0:20])
 
 
+# class Task(models.Model):
+#     name = models.CharField(max_length=200)
+#     # desc = models.ForeignKey(
+#     #     Desc, on_delete=models.SET_NULL, null=True)
+#     desc = models.TextField(null=True, blank=True)
+#     # date = models.ForeignKey(
+#     #     Date, on_delete=models.SET_NULL, null=True)
+#     date = models.DateField(default=date.today, null=True)
+#     category = models.CharField(max_length=200, null=True)
+
+#     def __str__(self):
+#         return self.name
+
 class Task(models.Model):
     name = models.CharField(max_length=200)
-    # desc = models.ForeignKey(
-    #     Desc, on_delete=models.SET_NULL, null=True)
     desc = models.TextField(null=True, blank=True)
-    # date = models.ForeignKey(
-    #     Date, on_delete=models.SET_NULL, null=True)
-    date = models.DateField(default=date.today, null=True)
+    date = models.DateTimeField(
+        auto_now_add=True, null=True)
     category = models.CharField(max_length=200, null=True)
+    # date = models.DateField(default=date.today, null=True)
+
+    class Meta:
+        ordering = ['-date']
 
     def __str__(self):
         return self.name

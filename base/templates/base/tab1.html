@@ -1,13 +1,26 @@
 {% extends 'main.html' %}
 
 {% block content %}
-{% for task in tasks %}
-  <h2>{{ task.name }}</h2>
-  <p>{{ task.desc }}</p>
-  <ul>
-    <li><strong>Date:</strong> {{ task.date }}</li>
-    <li><strong>category:</strong> {{ task.category }}</li>
-  </ul>
-  <hr>
-  {% endfor %}
+  <div style="overflow-x:auto;">
+    <table style="font-family: Arial, sans-serif; border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+      <thead>
+        <tr style="background-color: #343a40; color: #fff;">
+          <th style="padding: 12px; text-align: left;">Name</th>
+          <th style="padding: 12px; text-align: left;">Description</th>
+          <th style="padding: 12px; text-align: left;">Date</th>
+          <th style="padding: 12px; text-align: left;">Category</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for task in tasks %}
+        <tr style="background-color: #f2f2f2;">
+          <td style="padding: 12px; text-align: left; font-weight: bold;">{{ task.name }}</td>
+          <td style="padding: 12px; text-align: left;">{{ task.desc }}</td>
+          <td style="padding: 12px; text-align: left; color: #6c757d;">{{ task.date }}</td>
+          <td style="padding: 12px; text-align: left;">{{ task.category }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
