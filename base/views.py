@@ -2,7 +2,7 @@ import api_key
 import transcribe
 import openai
 from .models import Task
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import sys
 sys.path.append('..')
 

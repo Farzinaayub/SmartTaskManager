@@ -1,19 +1,20 @@
 {% extends 'main.html' %}
 
 
-{%  block content  %}
+{% block content %}
 <h1>Dashboard Template</h1>
 <div>
     <div>
-        
-        
-          <hr>
-          <div>
+
+
+        <hr>
+        <div>
             <h3><a href="{% url 'update' tasks.Id %}">{{ tasks.name }}</a></h3>
-          </div>
-          <hr>
-        
-    
+            <h3>{{ tasks.desc}}</h3>
+        </div>
+        <hr>
+
+
     </div>
 
 </div>
