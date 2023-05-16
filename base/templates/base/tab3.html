@@ -1,6 +1,51 @@
 {% extends 'main.html' %}
+{% block content %}
+  <h1>Speech Recognition</h1>
+  <button id="record-btn">Record</button>
+  <button id="stop-btn">Stop</button>
+  <br><br>
+  <audio id="recorded-audio" controls></audio>
+  <br><br>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" id="audio-blob" name="audio_blob">
+    <button type="submit"><a href="tab4.html">Transcribe</a></button>
+  </form>
 
+  <script>
+    let mediaRecorder;
+    let recordedChunks = [];
 
-{%  block content  %}
-<h2>tab3</h2>
+    const recordButton = document.getElementById('record-btn');
+    const stopButton = document.getElementById('stop-btn');
+    const recordedAudio = document.getElementById('recorded-audio');
+    const audioBlobInput = document.getElementById('audio-blob');
+
+    recordButton.addEventListener('click', startRecording);
+    stopButton.addEventListener('click', stopRecording);
+
+    function startRecording() {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.addEventListener('dataavailable', event => {
+            recordedChunks.push(event.data);
+          });
+          mediaRecorder.addEventListener('stop', () => {
+            const recordedBlob = new Blob(recordedChunks, { type: 'audio/webm' });
+            recordedAudio.src = URL.createObjectURL(recordedBlob);
+            audioBlobInput.value = recordedBlob;
+          });
+          mediaRecorder.start();
+        })
+        .catch(error => {
+          console.error('Error accessing microphone:', error);
+        });
+    }
+
+    function stopRecording() {
+      mediaRecorder.stop();
+      recordedChunks = [];
+    }
+  </script>
 {% endblock %}

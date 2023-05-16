@@ -22,15 +22,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-# def on_press(key):
-#     try:
-#         if key == keyboard.Key.ctrl_l and keyboard.KeyCode(char='o'):
-#             main()
-#     except AttributeError:
-#         pass
-
-
 if __name__ == '__main__':
     main()
-    # listener = keyboard.Listener(on_press=on_press)
-    # listener.start()

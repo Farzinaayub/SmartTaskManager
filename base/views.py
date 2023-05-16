@@ -1,48 +1,76 @@
 import api_key
 import transcribe
 import openai
+import cognitive
+from django.http import JsonResponse
 from .models import Task
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 import sys
+import requests
+import json
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from django.shortcuts import render
+from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechRecognizer, ResultReason
+from azure.cognitiveservices.speech.audio import AudioOutputConfig
+
+
 sys.path.append('..')
 
-if True:
-    openai.api_key = api_key.api
-    input_text = transcribe.from_mic()
 
-    def ner(input_text):
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=f"Extract the entities from the text with labels Id,name,desc,date,category\ntext: Remind me to buy some chocolates for saya and diya from Lulu Mall on today.\n\nId:1\nname:Set Reminder\ndesc: Buy Chocolates for kids\ndate:\ncategory:family\n##\ntext: assign the frontend module to rajesh's team. They can start working from tomorrow\n\nId:2\nname: Delegate\ndesc: Assign Frontend Module to rajesh's team\ndate:\ncategory:work\n##\ntext:{input_text}\n",
-            temperature=0.02,
-            max_tokens=256,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0
-        )
-        extracted_text = response['choices'][0]['text']
+def commandfn():
+    if True:
+        openai.api_key = api_key.api
+        input_text = transcribe.from_mic()
+        tasks = ner(input_text)
+        print(tasks)
+        return tasks
 
-        # Extract the entities from the extracted text and create a dictionary
-        entities = {}
-        for line in extracted_text.split('\n'):
-            if ':' in line:
-                key, value = line.split(':')
-                entities[key.strip()] = value.strip()
 
-        return entities
-        # return response['choices'][0]['text']
+def call_function(request):
+    # Call your desired Python function or perform any other actions
+    result = commandfn()
 
-    tasks = ner(input_text)
-    print(tasks)
+    # Return the result as a JSON response
+    response = {'result': result}
+    # print(response)
+    task = Task(name=result['name'], desc=result['desc'],
+                category=result['category'])
+    task.save()
+    return JsonResponse(response)
+
+
+def ner(input_text):
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=f"Extract the entities from the text with labels Id,name,desc,date,category\ntext: Remind me to buy some chocolates for saya and diya from Lulu Mall on today.\n\nId:1\nname:Set Reminder\ndesc: Buy Chocolates for kids\ndate:\ncategory:family\n##\ntext: assign the frontend module to rajesh's team. They can start working from tomorrow\n\nId:2\nname: Delegate\ndesc: Assign Frontend Module to rajesh's team\ndate:\ncategory:work\n##\ntext:{input_text}\n",
+        temperature=0.02,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    extracted_text = response['choices'][0]['text']
+
+    # Extract the entities from the extracted text and create a dictionary
+    entities = {}
+    for line in extracted_text.split('\n'):
+        if ':' in line:
+            key, value = line.split(':')
+            entities[key.strip()] = value.strip()
+
+    return entities
 
 
 def dashboard(request):
-    task = Task(name=tasks['name'], desc=tasks['desc'],
-                category=tasks['category'])
-    task.save()
 
-    context = {'tasks': tasks}
-    return render(request, 'base/Dashboard.html', context)
+    # task = Task(name=tasks['name'], desc=tasks['desc'],
+    #             category=tasks['category'])
+    # task.save()
+
+    # context = {'tasks': tasks}
+    return render(request, 'base/Dashboard.html')
 
 
 def tab1(request):
@@ -52,7 +80,7 @@ def tab1(request):
     return render(request, 'base/tab1.html', context)
 
 
-def taskpage(request, pk):
+def taskpage(request, tasks, pk):
     tasks['Id'] == pk
     context = {'task': tasks}
     return render(request, 'base/tab2.html', context)
@@ -60,21 +88,3 @@ def taskpage(request, pk):
 
 def tab3(request):
     return render(request, 'base/tab3.html')
-
-
-# from django.http import HttpResponse
-
-# Create your views here.
-# tasks = [
-
-#     {'taskid': '1', 'taskaction': 'Transfer',
-#         'taskname': 'Move Roy to Design team', 'taskdate': '14/4/23'},
-#     {'taskid': '2', 'taskaction': 'Shopping',
-#         'taskname': 'Buy Groceries for home', 'taskdate': '15/4/23'},
-#     {'taskid': '3', 'taskaction': 'Transfer',
-#         'taskname': 'Move Praveen to Development team', 'taskdate': '14/4/23'},
-#     {'taskid': '4', 'taskaction': 'Visit',
-#         'taskname': 'Visit Mr. Roy', 'taskdate': '14/4/23'},
-#     {'taskid': '5', 'taskaction': 'Conference',
-#         'taskname': 'Attend the tech conference', 'taskdate': '17/4/23'}
-# ]

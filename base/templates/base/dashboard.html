@@ -4,14 +4,13 @@
 {% block content %}
 <h1>Dashboard Template</h1>
 <div>
+    <button id="voice">
+        mic
+    </button>
     <div>
-
-
         <hr>
-        <div>
-            <h3><a href="{% url 'update' tasks.Id %}">{{ tasks.name }}</a></h3>
-            <h3>{{ tasks.desc}}</h3>
-        </div>
+        
+        <div id="display"></div>
         <hr>
 
 
@@ -19,6 +18,23 @@
 
 </div>
 
+{% block scripts %}
+    <script>
+const commandfn=async()=>{
+fetch('/call_function', { method: 'GET' }).then((res)=>res.json()
+).then((data)=>{
+    let name = document.createElement('h2');
+          name.textContent = data.result.name;
+          let display = document.getElementById('display');
+          display.appendChild(name);
+          console.log(data.result.name);
+})
+}
 
+        document.querySelector('#voice').addEventListener('click',commandfn)
+    </script>
+    {% endblock %}
+</body>
 
 {% endblock content %}
+
