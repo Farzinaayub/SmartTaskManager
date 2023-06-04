@@ -1,0 +1,4 @@
+azure-cognitiveservices-speech==1.23.0
+django==3.2.4
+requests==2.26.0
+
