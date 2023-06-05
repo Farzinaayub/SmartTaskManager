@@ -70,7 +70,7 @@ def dashboard(request):
     # task.save()
 
     # context = {'tasks': tasks}
-    return render(request, 'base/Dashboard.html')
+    return render(request, 'base/dashboard.html')
 
 
 def tab1(request):
