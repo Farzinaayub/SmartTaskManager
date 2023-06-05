@@ -1,6 +1,7 @@
 import api_key
 import transcribe
 import openai
+import os
 import cognitive
 from django.http import JsonResponse
 from .models import Task
@@ -17,11 +18,12 @@ from azure.cognitiveservices.speech.audio import AudioOutputConfig
 
 
 sys.path.append('..')
+# secret_key = os.environ.get('SECRET_KEY')
 
 
 def commandfn():
     if True:
-        openai.api_key = api_key.api
+        openai.api_key = os.environ.get('api')
         input_text = transcribe.from_mic()
         tasks = ner(input_text)
         print(tasks)
