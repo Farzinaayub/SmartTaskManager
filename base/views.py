@@ -12,8 +12,8 @@ import json
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-
-
+import logging
+import traceback
 
 sys.path.append('..')
 
@@ -27,17 +27,31 @@ def commandfn():
         return tasks
 
 
-def call_function(request):
-    # Call your desired Python function or perform any other actions
-    result = commandfn()
+# def call_function(request):
+#     # Call your desired Python function or perform any other actions
+#     result = commandfn()
 
-    # Return the result as a JSON response
-    response = {'result': result}
-    # print(response)
-    task = Task(name=result['name'], desc=result['desc'],
-                category=result['category'])
-    task.save()
-    return JsonResponse(response)
+#     # Return the result as a JSON response
+#     response = {'result': result}
+#     # print(response)
+#     task = Task(name=result['name'], desc=result['desc'],
+#                 category=result['category'])
+#     task.save()
+#     return JsonResponse(response)
+def call_function(request):
+    try:
+        result = commandfn()
+
+        response = {'result': result}
+        task = Task(name=result['name'], desc=result['desc'], category=result['category'])
+        task.save()
+
+        return JsonResponse(response)
+
+    except Exception as e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+        return HttpResponse(status=500)
 
 
 def ner(input_text):
