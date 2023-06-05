@@ -1,7 +1,8 @@
-import api_key
+# import api_key
 import transcribe
 import openai
-import cognitive
+import os
+# import cognitive
 from django.http import JsonResponse
 from .models import Task
 from django.shortcuts import render
@@ -11,34 +12,46 @@ import json
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-from django.shortcuts import render
-from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechRecognizer, ResultReason
-from azure.cognitiveservices.speech.audio import AudioOutputConfig
-
+import logging
+import traceback
 
 sys.path.append('..')
 
 
 def commandfn():
     if True:
-        openai.api_key = api_key.api
+        openai.api_key = os.environ.get('api')
         input_text = transcribe.from_mic()
         tasks = ner(input_text)
         print(tasks)
         return tasks
 
 
-def call_function(request):
-    # Call your desired Python function or perform any other actions
-    result = commandfn()
+# def call_function(request):
+#     # Call your desired Python function or perform any other actions
+#     result = commandfn()
 
-    # Return the result as a JSON response
-    response = {'result': result}
-    # print(response)
-    task = Task(name=result['name'], desc=result['desc'],
-                category=result['category'])
-    task.save()
-    return JsonResponse(response)
+#     # Return the result as a JSON response
+#     response = {'result': result}
+#     # print(response)
+#     task = Task(name=result['name'], desc=result['desc'],
+#                 category=result['category'])
+#     task.save()
+#     return JsonResponse(response)
+def call_function(request):
+    try:
+        result = commandfn()
+
+        response = {'result': result}
+        task = Task(name=result['name'], desc=result['desc'], category=result['category'])
+        task.save()
+
+        return JsonResponse(response)
+
+    except Exception as e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+        return HttpResponse(status=500)
 
 
 def ner(input_text):
@@ -70,7 +83,7 @@ def dashboard(request):
     # task.save()
 
     # context = {'tasks': tasks}
-    return render(request, 'base/Dashboard.html')
+    return render(request, 'base/dashboard.html')
 
 
 def tab1(request):

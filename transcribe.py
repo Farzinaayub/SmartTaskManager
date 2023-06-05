@@ -1,10 +1,11 @@
 import azure.cognitiveservices.speech as speechsdk
-import cognitive
+# import cognitive
+import os
 
 
 def from_mic():
     speech_config = speechsdk.SpeechConfig(
-        subscription=cognitive.subscription, region=cognitive.region)
+        subscription=os.environ.get('subscription'), region=os.environ.get('region'))
     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
 
     print("plz command")
