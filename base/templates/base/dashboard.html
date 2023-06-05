@@ -21,7 +21,7 @@
 {% block scripts %}
     <script>
 const commandfn=async()=>{
-await fetch('/call_function', { method: 'GET' }).then((res)=>res.json()
+await fetch('call_function/', { method: 'GET' }).then((res)=>res.json()
 ).then((data)=>{
     let name = document.createElement('h2');
           name.textContent = data.result.name;

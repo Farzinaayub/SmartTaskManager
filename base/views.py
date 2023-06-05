@@ -12,13 +12,10 @@ import json
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-from django.shortcuts import render
-from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechRecognizer, ResultReason
-from azure.cognitiveservices.speech.audio import AudioOutputConfig
+
 
 
 sys.path.append('..')
-# secret_key = os.environ.get('SECRET_KEY')
 
 
 def commandfn():
