@@ -1,8 +1,8 @@
-import api_key
+# import api_key
 import transcribe
 import openai
 import os
-import cognitive
+# import cognitive
 from django.http import JsonResponse
 from .models import Task
 from django.shortcuts import render

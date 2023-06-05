@@ -1,5 +1,5 @@
 import azure.cognitiveservices.speech as speechsdk
-import cognitive
+# import cognitive
 import os
 
 
