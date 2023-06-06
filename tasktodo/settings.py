@@ -84,9 +84,13 @@ WSGI_APPLICATION = 'tasktodo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {'default': dj_database_url.config(        # Feel free to alter this value to suit your needs.
-    default='postgresql://postgres:postgres@localhost:5432/first_postgresql',
-    conn_max_age=600)}
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://first_postgresql_2qhy_user:d46cCX1Nxo1vjfkSl5hsNrjCBUSyy1KE@dpg-chuucae7avj345fejf2g-a/first_postgresql_2qhy',
+        conn_max_age=600,
+    )
+}
 
 
 # Password validation
