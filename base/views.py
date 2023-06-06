@@ -17,14 +17,23 @@ import traceback
 
 sys.path.append('..')
 
+# Create a logger instance
+logger = logging.getLogger(__name__)
+
 
 def commandfn():
-    if True:
-        openai.api_key = os.environ.get('api')
-        input_text = transcribe.from_mic()
-        tasks = ner(input_text)
-        print(tasks)
-        return tasks
+    try:
+        logger.debug("Inside commandfn")
+        if True:
+            openai.api_key = os.environ.get('api')
+            input_text = transcribe.from_mic()
+            tasks = ner(input_text)
+            print(tasks)
+            return tasks
+    except Exception as e:
+        logger.error("An error occurred in commandfn:")
+        logger.error(str(e))
+        logger.error(traceback.format_exc())
 
 
 # def call_function(request):
@@ -40,18 +49,20 @@ def commandfn():
 #     return JsonResponse(response)
 def call_function(request):
     try:
+        logger.debug("Inside call_function")
         result = commandfn()
 
         response = {'result': result}
-        task = Task(name=result['name'], desc=result['desc'], category=result['category'])
+        task = Task(name=result['name'],
+                    desc=result['desc'], category=result['category'])
         task.save()
 
         return JsonResponse(response)
 
     except Exception as e:
-        logging.error(str(e))
-        logging.error(traceback.format_exc())
-        return HttpResponse(status=500)
+        logger.error("An error occurred in call_function:")
+        logger.error(str(e))
+        logger.error(traceback.format_exc())
 
 
 def ner(input_text):
